@@ -1,0 +1,14 @@
+module load prodigal
+wget https://github.com/hyattpd/Prodigal/releases/download/v2.6.3/prodigal.linux
+chmod +x prodigal.linux
+mkdir -p ~/bin
+mv prodigal.linux ~/bin/prodigal
+prodigal -v
+> Prodigal V2.6.3: February, 2016
+prodigal -i Genome.fna -o genes.gbk -a proteins.faa -p meta
+echo "File Name: $(basename genes.gbk)"
+echo "File Path: $(pwd)/genes.gbk"
+grep -c "CDS" genes.gbk
+> File Name: genes.gbk
+File Path: /home/alharbrn/Task_week_4/Task5/genes.gbk
+1060

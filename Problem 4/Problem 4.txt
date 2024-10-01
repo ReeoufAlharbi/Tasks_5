@@ -1,0 +1,73 @@
+module load prodigal
+
+# Find all .fna files in the current directory and its subdirectories
+find . -name "*.fna" -type f | while read fna_file; do
+    # Generate the corresponding .gff file path by replacing .fna with .gff
+    gff_file="${fna_file%.fna}.gff"
+
+    # Run Prodigal to generate the .gff file
+    prodigal -i "$fna_file" -o "$gff_file" -q
+
+    # Count the number of CDS in the .gff file
+    cds_count=$(grep -c CDS "$gff_file")
+
+    # Print the result
+    echo "File: $gff_file, CDS Count: $cds_count"
+done
+
+> File: ./GCA_000006745.1_ASM674v1_genomic.gff, CDS Count: 3594
+File: ./GCA_000006825.1_ASM682v1_genomic.gff, CDS Count: 2032
+File: ./GCA_000006865.1_ASM686v1_genomic.gff, CDS Count: 2383
+File: ./GCA_000007125.1_ASM712v1_genomic.gff, CDS Count: 3152
+File: ./GCA_000008525.1_ASM852v1_genomic.gff, CDS Count: 1579
+File: ./GCA_000008545.1_ASM854v1_genomic.gff, CDS Count: 1866
+File: ./GCA_000008565.1_ASM856v1_genomic.gff, CDS Count: 3248
+File: ./GCA_000008605.1_ASM860v1_genomic.gff, CDS Count: 1009
+File: ./GCA_000008625.1_ASM862v1_genomic.gff, CDS Count: 1776
+File: ./GCA_000008725.1_ASM872v1_genomic.gff, CDS Count: 897
+File: ./GCA_000008745.1_ASM874v1_genomic.gff, CDS Count: 1063
+File: ./GCA_000008785.1_ASM878v1_genomic.gff, CDS Count: 1505
+File: ./GCA_000027305.1_ASM2730v1_genomic.gff, CDS Count: 1748
+File: ./GCA_000091085.2_ASM9108v2_genomic.gff, CDS Count: 1063
+
+
+
+-
+# Create a temporary directory for output files
+mkdir -p tmp
+
+# Load the Prokka module
+module load prokka
+
+# Find all .fna files in the current directory and its subdirectories
+find . -name "*.fna" -type f | while read fna_file; do
+    # Extract the file name without the path (basename)
+    filename=$(basename "$fna_file")
+
+    # Generate the corresponding .gff file path and place it in the tmp directory
+    gff_file="tmp/${filename%.fna}.gff"
+
+    # Run Prokka to generate the .gff file
+    prokka --outdir tmp --force --prefix "${filename%.fna}" "$fna_file" > /dev/null 2>&1
+
+    # Count the number of CDS in the .gff file
+    cds_count=$(grep -c CDS "$gff_file")
+
+    # Print the result
+    echo "File: $gff_file, CDS Count: $cds_count"
+done
+
+> File: tmp/GCA_000006745.1_ASM674v1_genomic.gff, CDS Count: 3589
+File: tmp/GCA_000006825.1_ASM682v1_genomic.gff, CDS Count: 2028
+File: tmp/GCA_000006865.1_ASM686v1_genomic.gff, CDS Count: 2383
+File: tmp/GCA_000007125.1_ASM712v1_genomic.gff, CDS Count: 3150
+File: tmp/GCA_000008525.1_ASM852v1_genomic.gff, CDS Count: 1577
+File: tmp/GCA_000008545.1_ASM854v1_genomic.gff, CDS Count: 1861
+File: tmp/GCA_000008565.1_ASM856v1_genomic.gff, CDS Count: 3245
+File: tmp/GCA_000008605.1_ASM860v1_genomic.gff, CDS Count: 1001
+File: tmp/GCA_000008625.1_ASM862v1_genomic.gff, CDS Count: 1771
+File: tmp/GCA_000008725.1_ASM872v1_genomic.gff, CDS Count: 892
+File: tmp/GCA_000008745.1_ASM874v1_genomic.gff, CDS Count: 1058
+File: tmp/GCA_000008785.1_ASM878v1_genomic.gff, CDS Count: 1504
+File: tmp/GCA_000027305.1_ASM2730v1_genomic.gff, CDS Count: 1748
+File: tmp/GCA_000091085.2_ASM9108v2_genomic.gff, CDS Count: 1056
