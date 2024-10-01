@@ -27,9 +27,22 @@ prodigal -v
 ```
 
 ```shell
+# Run Prodigal to predict genes
+# -i: input genome file in FASTA format
+# -o: output predicted genes in GenBank format
+# -a: output predicted proteins in FASTA format
+# -p meta: use metagenomic mode (useful for mixed microbial communities)
 prodigal -i Genome.fna -o genes.gbk -a proteins.faa -p meta
+
+# Print the base name of the GenBank output file (just the file name without the directory path)
 echo "File Name: $(basename genes.gbk)"
+
+# Print the full path of the GenBank output file
+# $(pwd) gives the current working directory
 echo "File Path: $(pwd)/genes.gbk"
+
+# Count the number of coding sequences (CDS) in the GenBank file
+# grep searches for lines containing "CDS" and -c counts the occurrences
 grep -c "CDS" genes.gbk
 ```
 
